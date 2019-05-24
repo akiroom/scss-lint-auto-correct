@@ -4,8 +4,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "scss/lint/auto/correct/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "scss-lint-auto-correct"
-  spec.version       = Scss::Lint::Auto::Correct::VERSION
+  spec.name          = "scss_lint_auto_correct"
+  spec.version       = SCSSLintAutoCorrect::VERSION
   spec.authors       = ["Hiroki Akiyama"]
   spec.email         = ["akiyama@akiroom.com"]
 

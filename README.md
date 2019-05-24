@@ -9,7 +9,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'scss-lint-auto-correct'
+gem 'scss_lint_auto_correct'
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install scss-lint-auto-correct
+    $ gem install scss_lint_auto_correct
 
 ## Usage
 
@@ -32,4 +32,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/scss-lint-auto-correct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/akiroom/scss-lint-auto-correct.

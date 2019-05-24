@@ -56,12 +56,12 @@ module SCSSLintAutoCorrect::Corrector
     end
 
     # Insert text into line
-    def insert_text_into_line(text)
+    def insert_text_into_line(text, index: nil)
       # Load
       file_lines = load_lines
 
       # Replace color keyword to hex code.
-      file_lines[line_num-1].insert(char_num, text)
+      file_lines[line_num-1].insert(index || char_num, text)
 
       # Save
       save_lines(file_lines)

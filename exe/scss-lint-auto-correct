@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'scss_lint_auto_correct'
 require 'scss_lint_auto_correct/cli'

@@ -3,7 +3,7 @@ module SCSSLintAutoCorrect::Corrector
     def fix_it
       matched = desc.match(/`(?<before>[\d\.]+)` .+ `\.(?<after>\d+)`/)
 
-      rewrite_gsub_line(matched[:before], ".#{matched[:after]}")
+      rewrite_sub_line(matched[:before], ".#{matched[:after]}")
 
       fixed_line
     end

@@ -40,12 +40,16 @@ module SCSSLintAutoCorrect::Corrector
     end
 
     # Replace with before after
-    def rewrite_gsub_line(before, after)
+    def rewrite_sub_line(before, after = nil)
       # Load
       file_lines = load_lines
 
       # Replace color keyword to hex code.
-      file_lines[line_num-1] = file_lines[line_num-1].gsub(before, after)
+      if block_given?
+        file_lines[line_num-1] = file_lines[line_num-1].sub(before) { |match| yield(match) }
+      else
+        file_lines[line_num-1] = file_lines[line_num-1].sub(before, after)
+      end
 
       # Save
       save_lines(file_lines)

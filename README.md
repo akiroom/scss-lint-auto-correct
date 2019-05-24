@@ -26,7 +26,7 @@ Or install it yourself as:
 $ bundle exec scss-lint | bundle exec scss-lint-auto-correct
 ```
 
-### Linters
+### Auto correctable linters
 
 - ColorKeyword
 - Indentation
@@ -36,6 +36,7 @@ $ bundle exec scss-lint | bundle exec scss-lint-auto-correct
 - SpaceAfterPropertyName
 - UnnecessaryMantissa
 - UnnecessaryParentReference
+- ZeroUnit
 
 ## Development
 

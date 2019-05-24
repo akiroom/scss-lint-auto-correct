@@ -3,5 +3,5 @@
 require 'scss_lint_auto_correct'
 require 'scss_lint_auto_correct/cli'
 
-SCSSLintAutoCorrect::CLI.start(ARGV)
+res = SCSSLintAutoCorrect::CLI.start(ARGV)
 exit 0

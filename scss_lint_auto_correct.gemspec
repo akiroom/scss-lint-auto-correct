@@ -37,9 +37,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'thor', '~> 0.20.0'
+  spec.add_dependency 'scss_lint', '~> 0.58.0'
+  spec.add_dependency 'colorize', '~> 0.8.0'
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 0.69.0'
-  spec.add_development_dependency 'scss_lint', '~> 0.58.0'
 end

@@ -8,14 +8,7 @@ module SCSSLintAutoCorrect::Corrector
     def fix_it
       matched = desc.match(/^.+? `(?<before>.+?)` .+? `#(?<after>.+?)`$/)
 
-      # Load
-      file_lines = File.readlines(file_path)
-
-      # Replace color keyword to hex code.
-      file_lines[line_num-1] = file_lines[line_num-1].gsub(matched[:before], "##{matched[:after]}")
-
-      # Save
-      File.write(file_path, file_lines.join)
+      rewrite_gsub_line(matched[:before], "##{matched[:after]}")
 
       fixed_line
     end

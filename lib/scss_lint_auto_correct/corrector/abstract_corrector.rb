@@ -36,5 +36,17 @@ module SCSSLintAutoCorrect::Corrector
     def nothing_line
       "#{file_path.cyan}:#{line_num.to_s.magenta}:#{char_num.to_s.magenta} #{level.yellow} #{class_name.green}: #{desc}"
     end
+
+    def rewrite_gsub_line(before, after)
+      # Load
+      file_lines = File.readlines(file_path)
+
+      # Replace color keyword to hex code.
+      file_lines[line_num-1] = file_lines[line_num-1].gsub(before, after)
+
+      # Save
+      File.write(file_path, file_lines.join)
+
+    end
   end
 end

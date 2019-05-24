@@ -1,11 +1,11 @@
 module SCSSLintAutoCorrect::Corrector
-  class FinalNewline < AbstractCorrector
+  class EmptyLineBetweenBlocks < AbstractCorrector
     def fix_it
       # Load
       file_lines = load_lines
 
       # Add newline
-      file_lines.push("\n")
+      file_lines.insert(line_num, "\n")
 
       # Save
       save_lines(file_lines)

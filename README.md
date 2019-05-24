@@ -34,6 +34,7 @@ $ bundle exec scss-lint | bundle exec scss-lint-auto-correct
 - SpaceAfterComma
 - SpaceAfterPropertyColon
 - SpaceAfterPropertyName
+- UnnecessaryMantissa
 - UnnecessaryParentReference
 
 ## Development

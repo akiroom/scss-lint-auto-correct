@@ -45,14 +45,16 @@ module SCSSLintAutoCorrect::Corrector
       file_lines = load_lines
 
       # Replace color keyword to hex code.
+      before_line = file_lines[line_num-1]
       if block_given?
-        file_lines[line_num-1] = file_lines[line_num-1].sub(before) { |match| yield(match) }
+        file_lines[line_num-1] = before_line.sub(before) { |match| yield(match) }
       else
-        file_lines[line_num-1] = file_lines[line_num-1].sub(before, after)
+        file_lines[line_num-1] = before_line.sub(before, after)
       end
 
       # Save
       save_lines(file_lines)
+      before_line != file_lines[line_num-1]
     end
 
     # Insert text into line

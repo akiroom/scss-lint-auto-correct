@@ -1,3 +1,4 @@
+require 'thor'
 require "scss_lint_auto_correct/version"
 
 module SCSSLintAutoCorrect

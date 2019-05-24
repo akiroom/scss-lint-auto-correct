@@ -6,6 +6,8 @@ module SCSSLintAutoCorrect::Corrector
     end
 
     def fix_it
+      matched = desc.match(/^.+? `(?<before>.+?)` .+? `#(?<after>.+?)`$/)
+      pp matched
       fixed_line
     end
   end

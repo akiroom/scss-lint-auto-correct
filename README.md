@@ -29,8 +29,11 @@ $ bundle exec scss-lint | bundle exec scss-lint-auto-correct
 ### Linters
 
 - ColorKeyword
+- Indentation
 - LeadingZero
 - SpaceAfterComma
+- SpaceAfterPropertyColon
+- SpaceAfterPropertyName
 
 ## Development
 

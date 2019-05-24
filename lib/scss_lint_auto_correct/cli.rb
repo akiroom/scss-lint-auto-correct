@@ -21,10 +21,12 @@ module SCSSLintAutoCorrect
     private
 
     def fix_for_lines(lines)
-      lines.each do |line|
-        # matched = line.match(/^(?<file_path>.+):(?<line_num>(\d)+):(?<char_num>(\d)+) (?<level>\[[A-Z]\]) (?<class_name>.+?): (?<desc>.+)$/)
+      result = lines.reverse.map do |line|
+        SCSSLintAutoCorrect::CorrectorFactory.concrete(line).fix_it
+      end.reverse
 
-        puts SCSSLintAutoCorrect::CorrectorFactory.concrete(line).fix_it
+      result.each do |res|
+        puts res
       end
 
       # runner = Runner.new(config)

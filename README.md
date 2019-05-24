@@ -22,7 +22,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+$ bundle exec scss-lint | bundle exec scss-lint-auto-correct
+```
+
+### Linters
+
+- ColorKeyword
+- LeadingZero
+- SpaceAfterComma
 
 ## Development
 

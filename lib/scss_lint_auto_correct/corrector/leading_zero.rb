@@ -1,10 +1,5 @@
 module SCSSLintAutoCorrect::Corrector
   class LeadingZero < AbstractCorrector
-    # Concrete
-    def corrector(line)
-      self.class.new(line)
-    end
-
     def fix_it
       matched = desc.match(/`(?<before>[\d\.]+)` .+ `\.(?<after>\d+)`/)
 

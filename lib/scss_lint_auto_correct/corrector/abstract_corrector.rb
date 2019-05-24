@@ -29,24 +29,48 @@ module SCSSLintAutoCorrect::Corrector
       end
     end
 
+    # The text for output with success to correct.
     def fixed_line
       "#{file_path.cyan}:#{line_num.to_s.magenta}:#{char_num.to_s.magenta} #{'[FIXED]'.green} #{class_name.green}: #{desc}"
     end
 
+    # The text for output with nothing.
     def nothing_line
       "#{file_path.cyan}:#{line_num.to_s.magenta}:#{char_num.to_s.magenta} #{level.yellow} #{class_name.green}: #{desc}"
     end
 
+    # Replace with before after
     def rewrite_gsub_line(before, after)
       # Load
-      file_lines = File.readlines(file_path)
+      file_lines = load_lines
 
       # Replace color keyword to hex code.
       file_lines[line_num-1] = file_lines[line_num-1].gsub(before, after)
 
       # Save
-      File.write(file_path, file_lines.join)
+      save_lines(file_lines)
+    end
 
+    # Insert text into line
+    def insert_text_into_line(text)
+      # Load
+      file_lines = load_lines
+
+      # Replace color keyword to hex code.
+      file_lines[line_num-1].insert(char_num, text)
+
+      # Save
+      save_lines(file_lines)
+    end
+
+    private
+
+    def load_lines
+      File.readlines(file_path)
+    end
+
+    def save_lines(file_lines)
+      File.write(file_path, file_lines.join)
     end
   end
 end

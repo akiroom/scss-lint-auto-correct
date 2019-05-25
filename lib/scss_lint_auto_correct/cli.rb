@@ -11,9 +11,8 @@ module SCSSLintAutoCorrect
       @log = logger
     end
 
-    def run(_args)
-      fix_for_lines($stdin.read.split("\n"))
-      0
+    def run(scss_lint_result)
+      fix_for_lines(scss_lint_result.split("\n"))
     # rescue StandardError => ex
       # handle_runtime_exception(ex, options)
     end
@@ -21,8 +20,10 @@ module SCSSLintAutoCorrect
     private
 
     def fix_for_lines(lines)
+      p lines
       result = lines.reverse.map do |line|
-        SCSSLintAutoCorrect::CorrectorFactory.concrete(line).fix_it
+        cleaned_line = line.gsub(/\e\[\d+m/, '') # remove color control characters
+        SCSSLintAutoCorrect::CorrectorFactory.concrete(cleaned_line).fix_it
       end.reverse
 
       result.each do |res|

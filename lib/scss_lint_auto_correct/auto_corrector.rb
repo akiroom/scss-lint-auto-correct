@@ -3,11 +3,10 @@ require 'scss_lint_auto_correct/corrector_factory'
 
 module SCSSLintAutoCorrect
   class AutoCorrector
-    # Create a CLI that outputs to the specified logger.
-    #
-    # @param logger [SCSSLint::Logger]
-    def initialize(logger)
-      @log = logger
+    attr_reader :log
+    def initialize(color: nil, log: nil, **args)
+      @log = log
+      @color = color
     end
 
     def run(scss_lint_result)
@@ -22,12 +21,12 @@ module SCSSLintAutoCorrect
 
     def fix_for_lines(lines)
       result = lines.reverse.map do |line|
-        SCSSLintAutoCorrect::CorrectorFactory.concrete(line).fix_it
+        SCSSLintAutoCorrect::CorrectorFactory.concrete(line: line, log: log).fix_it
       end.reverse
 
       # Output result
       result.each do |res|
-        puts res
+        log.log res
       end
     end
   end

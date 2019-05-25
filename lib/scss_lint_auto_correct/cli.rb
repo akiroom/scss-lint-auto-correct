@@ -3,50 +3,62 @@ require 'scss_lint_auto_correct/options'
 
 module SCSSLintAutoCorrect
   class CLI
+    attr_reader :log
+    def initialize(logger)
+      @log = logger
+    end
+
     # Call block when scss-lint returns only warnings.
-    def run(options, &block)
-      act_on_options(options, &block)
+    def run(options)
+      act_on_options(options)
     end
 
     private
 
-    def act_on_options(options, &block)
+    def act_on_options(options)
+      log.color_enabled = options.fetch(:color, log.tty?)
+
       if options[:help]
-        puts options[:help]
+        log.log options[:help]
       elsif options[:version]
-        puts "scss-lint-auto-correct #{SCSSLintAutoCorrect::VERSION}"
+        log.log "scss-lint-auto-correct #{SCSSLintAutoCorrect::VERSION}"
       else
-        scan_for_lints(options, &block)
+        scan_for_lints(options)
       end
     end
 
     def scan_for_lints(options)
       # Build arguments
-      bypass_args = ''
-      if options[:color]
-        bypass_args += "--color "
+      linter__args = ''
+      if options.fetch(:color, log.tty?)
+        linter__args += '--color '
       end
 
       # Build CLI command
       cli_code =
         if ENV['BUNDLE_GEMFILE']
-          "bundle exec scss-lint #{bypass_args}"
+          "bundle exec scss-lint #{linter__args}"
         else
-          "scss-lint #{bypass_args}"
+          "scss-lint #{linter__args}"
         end
 
       # Run scss-lint
-      Open3.popen3(cli_code) do |stdin, stdout, stderr, wait_thr|
-        stdin.close
+      Open3.popen3(cli_code) do |stdin, stdout, _stderr, wait_thr|
         exit_status = wait_thr.value.exitstatus
+
+        # Check exit status
         if exit_status == SCSSLint::CLI::EXIT_CODES[:warning]
-          # only warnings
-          yield stdout.read, exit_status
+          # Can treat only warnings
+          # -> Start to auto-correct it.
+          SCSSLintAutoCorrect::AutoCorrector.new(options.merge(log: log)).run(stdout.read)
         else
-          # scss-lint-auto-correct cannot treat this exit status.
+          # Cannot treat this exit status.
+          # -> returns scss-lint result directly.
           printf stdout.read
-          exit exit_status
         end
+
+        # Exit with status code returned from scss-lint
+        exit exit_status
       end
     end
   end

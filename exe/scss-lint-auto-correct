@@ -7,9 +7,6 @@ require 'scss_lint_auto_correct/auto_corrector'
 require 'scss_lint_auto_correct/logger'
 
 options = SCSSLintAutoCorrect::Options.new.parse(ARGV)
+logger = SCSSLintAutoCorrect::Logger.new(STDOUT)
 
-SCSSLintAutoCorrect::CLI.new.run(options) do |result, exit_status|
-  logger = SCSSLintAutoCorrect::Logger.new(STDOUT)
-  SCSSLintAutoCorrect::AutoCorrector.new(logger).run(result)
-  exit exit_status
-end
+SCSSLintAutoCorrect::CLI.new(logger).run(options)

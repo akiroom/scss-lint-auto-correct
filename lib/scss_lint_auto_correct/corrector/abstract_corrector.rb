@@ -7,9 +7,11 @@ module SCSSLintAutoCorrect::Corrector
     attr_reader :level
     attr_reader :class_name
     attr_reader :desc
+    attr_reader :log
 
-    def initialize(line)
+    def initialize(line: , log: nil)
       @line = line
+      @log = log
 
       matched = line.match(/^(?<file_path>.+):(?<line_num>(\d)+):(?<char_num>(\d)+) (?<level>\[[A-Z]\]) (?<class_name>.+?): (?<desc>.+)$/)
 
@@ -31,12 +33,12 @@ module SCSSLintAutoCorrect::Corrector
 
     # The text for output with success to correct.
     def fixed_line
-      "#{file_path.cyan}:#{line_num.to_s.magenta}:#{char_num.to_s.magenta} #{'[FIXED]'.green} #{class_name.green}: #{desc}"
+      "#{log.cyan(file_path)}:#{log.magenta(line_num.to_s)}:#{log.magenta(char_num.to_s)} #{log.green('[FIXED]')} #{log.green(class_name)}: #{desc}"
     end
 
     # The text for output with nothing.
     def nothing_line
-      "#{file_path.cyan}:#{line_num.to_s.magenta}:#{char_num.to_s.magenta} #{level.yellow} #{class_name.green}: #{desc}"
+      "#{log.cyan(file_path)}:#{log.magenta(line_num.to_s)}:#{log.magenta(char_num.to_s)} #{log.yellow(level)} #{log.green(class_name)}: #{desc}"
     end
 
     # Replace with before after

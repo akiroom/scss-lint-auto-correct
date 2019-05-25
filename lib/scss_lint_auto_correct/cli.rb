@@ -1,33 +1,52 @@
-# frozen_string_literal: true
-require 'scss_lint_auto_correct/corrector_factory'
+require 'scss_lint/cli'
+require 'scss_lint_auto_correct/options'
 
 module SCSSLintAutoCorrect
   class CLI
-    # Create a CLI that outputs to the specified logger.
-    #
-    # @param logger [SCSSLint::Logger]
-    def initialize(logger)
-      @log = logger
-    end
-
-    def run(scss_lint_result)
-      lines = scss_lint_result.split("\n").map do |line|
-        # remove color control characters
-        line.gsub(/\e\[\d+m/, '')
-      end
-      fix_for_lines(lines)
+    # Call block when scss-lint returns only warnings.
+    def run(options, &block)
+      act_on_options(options, &block)
     end
 
     private
 
-    def fix_for_lines(lines)
-      result = lines.reverse.map do |line|
-        SCSSLintAutoCorrect::CorrectorFactory.concrete(line).fix_it
-      end.reverse
+    def act_on_options(options, &block)
+      if options[:help]
+        puts options[:help]
+      elsif options[:version]
+        puts "scss-lint-auto-correct #{SCSSLintAutoCorrect::VERSION}"
+      else
+        scan_for_lints(options, &block)
+      end
+    end
 
-      # Output result
-      result.each do |res|
-        puts res
+    def scan_for_lints(options)
+      # Build arguments
+      bypass_args = ''
+      if options[:color]
+        bypass_args += "--color "
+      end
+
+      # Build CLI command
+      cli_code =
+        if ENV['BUNDLE_GEMFILE']
+          "bundle exec scss-lint #{bypass_args}"
+        else
+          "scss-lint #{bypass_args}"
+        end
+
+      # Run scss-lint
+      Open3.popen3(cli_code) do |stdin, stdout, stderr, wait_thr|
+        stdin.close
+        exit_status = wait_thr.value.exitstatus
+        if exit_status == SCSSLint::CLI::EXIT_CODES[:warning]
+          # only warnings
+          yield stdout.read, exit_status
+        else
+          # scss-lint-auto-correct cannot treat this exit status.
+          printf stdout.read
+          exit exit_status
+        end
       end
     end
   end

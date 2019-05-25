@@ -2,42 +2,16 @@
 # frozen_string_literal: true
 
 require 'scss_lint_auto_correct'
-require 'scss_lint_auto_correct/logger'
+require 'scss_lint_auto_correct/scss_lint_bypass'
 require 'scss_lint_auto_correct/cli'
-require 'scss_lint/options'
-require 'scss_lint/cli'
-require "open3"
+require 'scss_lint_auto_correct/logger'
 
-# p ARGV.join(' ')
-# p "how: #{STDOUT.tty?}"
-# args = ARGV.join(' ')
+opts = {
+  color: !!(STDOUT.respond_to?(:tty?) && STDOUT.tty?)
+}
 
-can_color = STDOUT.respond_to?(:tty?) && STDOUT.tty?
-args = " #{can_color && '--color'}"
-cli_code =
-  if ENV['BUNDLE_GEMFILE']
-    "bundle exec scss-lint #{args}"
-  else
-    "scss-lint #{args}"
-  end
-
-Open3.popen3(cli_code) do |stdin, stdout, stderr, wait_thr|
-  stdin.close
-  exit_status = wait_thr.value.exitstatus
-  if exit_status == SCSSLint::CLI::EXIT_CODES[:warning]
-    # only warnings
-    logger = SCSSLintAutoCorrect::Logger.new(STDOUT)
-    SCSSLintAutoCorrect::CLI.new(logger).run(stdout.read)
-    exit exit_status
-  else
-    # scss-lint-auto-correct cannot treat this exit status.
-    printf stdout.read
-    exit exit_status
-  end
+SCSSLintAutoCorrect::SCSSLintBypass.new.run(opts) do |result, exit_status|
+  logger = SCSSLintAutoCorrect::Logger.new(STDOUT)
+  SCSSLintAutoCorrect::CLI.new(logger).run(result)
+  exit exit_status
 end
-
-# exit
-#
-# logger = SCSSLintAutoCorrect::Logger.new(STDOUT)
-# SCSSLintAutoCorrect::CLI.new(logger).run(ARGV)
-# exit

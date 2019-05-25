@@ -6,11 +6,9 @@ require 'scss_lint_auto_correct/scss_lint_bypass'
 require 'scss_lint_auto_correct/cli'
 require 'scss_lint_auto_correct/logger'
 
-opts = {
-  color: !!(STDOUT.respond_to?(:tty?) && STDOUT.tty?)
-}
+options = SCSSLintAutoCorrect::Options.new.parse(ARGV)
 
-SCSSLintAutoCorrect::SCSSLintBypass.new.run(opts) do |result, exit_status|
+SCSSLintAutoCorrect::SCSSLintBypass.new.run(options) do |result, exit_status|
   logger = SCSSLintAutoCorrect::Logger.new(STDOUT)
   SCSSLintAutoCorrect::CLI.new(logger).run(result)
   exit exit_status

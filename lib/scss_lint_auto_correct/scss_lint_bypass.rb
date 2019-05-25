@@ -1,18 +1,38 @@
 require 'scss_lint/cli'
+require 'scss_lint_auto_correct/options'
 
 module SCSSLintAutoCorrect
   class SCSSLintBypass
     # Call block when scss-lint returns only warnings.
-    def run(color: )
+    def run(options, &block)
+      act_on_options(options, &block)
+    end
+
+    private
+
+    def act_on_options(options, &block)
+      if options[:help]
+        puts options[:help]
+      elsif options[:version]
+        puts "scss-lint-auto-correct #{SCSSLintAutoCorrect::VERSION}"
+      else
+        scan_for_lints(options, &block)
+      end
+    end
+
+    def scan_for_lints(options)
       # Build arguments
-      args = " #{color && '--color'}"
+      bypass_args = ''
+      if options[:color]
+        bypass_args += "--color "
+      end
 
       # Build CLI command
       cli_code =
         if ENV['BUNDLE_GEMFILE']
-          "bundle exec scss-lint #{args}"
+          "bundle exec scss-lint #{bypass_args}"
         else
-          "scss-lint #{args}"
+          "scss-lint #{bypass_args}"
         end
 
       # Run scss-lint
